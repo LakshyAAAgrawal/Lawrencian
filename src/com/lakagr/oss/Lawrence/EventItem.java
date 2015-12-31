@@ -1,10 +1,10 @@
 package com.lakagr.oss.Lawrence;
 import java.lang.String;
 public class EventItem{
-	boolean isText;
+	String type;
 	String val;
-	public EventItem(boolean isText,String val){
-		this.isText=isText;
+	public EventItem(String type,String val){
+		this.type=type;
 		this.val=val;
 	}
 }
