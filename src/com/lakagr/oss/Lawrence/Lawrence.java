@@ -1,4 +1,5 @@
 package com.lakagr.oss.Lawrence;
+
 import com.lakagr.oss.Lawrence.*;
 import android.app.Activity;
 import android.os.Bundle;
@@ -21,16 +22,17 @@ public class Lawrence extends Activity
 	private InputStream stream;
 	private LawrenceAdapter adapter;
 	private ListView listview;
+	private final File xmlFile=new File(Context.getFilesDir(),"LawrenceXml.xml"),directory=new File(Contex.getFilesDir());
     	/** Called when the activity is first created. */
     	@Override
     	public void onCreate(Bundle savedInstanceState)
     	{
         	super.onCreate(savedInstanceState);
         	setContentView(R.layout.main);
-        	
+        	init();
        		try{
-       			 stream=download("http://www.randomsongs.hostei.com/test.xml");
-        		 list=LawrenceXmlParser.parse(stream);
+       			 stream=netTools.getHttpInputStream("http://www.randomsongs.hostei.com/test.xml");
+        		 list=new LawrenceXmlParser().parse(stream);
         		 stream.close();
         	}catch(Exception e){
         		Toast.makeText(getApplicationContext(), "Internet Error",Toast.LENGTH_LONG).show();
@@ -41,9 +43,16 @@ public class Lawrence extends Activity
         	listview=(ListView)findViewById(R.id.listview);
         	listview.setAdapter(adapter);
     	}
+    	
  	private InputStream download(String urlString) throws IOException{
     		URL url=new URL(urlString);
     		HttpURLConnection conn=(HttpURLConnection)url.openConnection();
     		return conn.getInputStream();
+    	}
+    	
+    	private void init(){
+    		if(!xmlFile.exists()){
+    			netTools.download(directory,"http://www.randomsongs.hostei.com/test.xml","LawrenceXml.xml");
+    		}
     	}
 }
